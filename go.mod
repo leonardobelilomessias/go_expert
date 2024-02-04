@@ -1,3 +1,3 @@
-module studies.com
+module goexpert.com
 
 go 1.19
