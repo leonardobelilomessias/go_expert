@@ -1,0 +1,7 @@
+{{template "header.html"}}
+<body>
+{{ range . }}
+    <h1>{{ .Name | Toupper}}</h1>
+{{ end }}
+</body>
+</html>
