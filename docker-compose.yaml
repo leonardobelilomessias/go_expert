@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    container_name: gomysql
+    restart: always
+    platform: linux/x64
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=goexpert
+      - MYSQL_PASSWORD=root
+    ports:
+      - "3306:3306"
