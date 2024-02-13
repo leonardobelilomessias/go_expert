@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"testing"
-
 	"github.com/stretchr/testify/assert"
 	"goexpert.com/module07/internal/entity"
 	"gorm.io/driver/sqlite"
