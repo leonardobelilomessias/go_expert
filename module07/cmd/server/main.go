@@ -2,13 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"net/http"
 	"goexpert.com/module07/configs"
 	"goexpert.com/module07/internal/dto"
 	"goexpert.com/module07/internal/entity"
 	"goexpert.com/module07/internal/infra/database"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 func main() {
@@ -21,6 +21,9 @@ func main() {
 		panic(err)
 	}
 	db.AutoMigrate(&entity.Product{}, entity.User{})
+	preducutDB := database.NewProduct(db)
+	productHandler := NewProductHandle(preducutDB)
+	http.HandleFunc("/products", productHandler.CreateProduct)
 	http.ListenAndServe(":8000", nil)
 }
 
