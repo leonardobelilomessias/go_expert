@@ -1,8 +1,8 @@
 package entity
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestNewProduct(t *testing.T) {
@@ -11,7 +11,7 @@ func TestNewProduct(t *testing.T) {
 	assert.NotNil(t, p)
 	assert.NotEmpty(t, p.ID)
 	assert.Equal(t, "Product 1", p.Name)
-	assert.Equal(t, 10, p.Price)
+	assert.Equal(t, 10.0, p.Price)
 }
 func TestProductWhenNameIsRequired(t *testing.T) {
 	p, err := NewProduct("", 10)

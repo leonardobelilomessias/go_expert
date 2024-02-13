@@ -12,7 +12,7 @@ type User struct{
 	Password string `json:"password"`
 }
 
-func newUser(name, email, password string) (*User , error){
+func NewUser(name, email, password string) (*User , error){
 	hash , err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err!= nil{
 		return nil, err
