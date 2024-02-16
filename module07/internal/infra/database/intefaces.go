@@ -12,4 +12,5 @@ type ProductInterface interface {
 	FindAll(page int, limit int, sort string) ([]entity.Product, error)
 	FindByID(id string) (*entity.Product, error)
 	Delete(id string) error
+	Update(product *entity.Product) error 
 }
