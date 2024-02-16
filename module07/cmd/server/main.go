@@ -26,13 +26,17 @@ func main() {
 	preducutDB := database.NewProduct(db)
 	productHandler := handlers.NewProductHandle(preducutDB)
 
+	userDB := database.NewUser(db)
+	userHandler := handlers.NewUserHandler(userDB)
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/products/{id}", productHandler.GetProduct)
 	r.Get("/products", productHandler.GetProducts)
 	r.Put("/products/{id}", productHandler.UpdateProduct)
 	r.Post("/products", productHandler.CreateProduct)
+	r.Post("/users", userHandler.Create)
 	r.Delete("/products/{id}", productHandler.DeleteProduct)
-	
+
 	http.ListenAndServe(":8000", r)
 }
