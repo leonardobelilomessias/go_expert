@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/jwtauth"
 	"goexpert.com/module07/configs"
 	"goexpert.com/module07/internal/entity"
 	"goexpert.com/module07/internal/infra/database"
@@ -31,13 +32,17 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Get("/products/{id}", productHandler.GetProduct)
-	r.Get("/products", productHandler.GetProducts)
-	r.Put("/products/{id}", productHandler.UpdateProduct)
-	r.Post("/products", productHandler.CreateProduct)
+	r.Route("/products", func(r chi.Router) {
+		r.Use(jwtauth.Verifier(configs.TokenAuth))
+		r.Use(jwtauth.Authenticator)
+		r.Get("/", productHandler.GetProducts)
+		r.Post("/", productHandler.CreateProduct)
+		r.Get("/{id}", productHandler.GetProduct)
+		r.Put("/{id}", productHandler.UpdateProduct)
+		r.Delete("/{id}", productHandler.DeleteProduct)
+	})
 	r.Post("/users", userHandler.Create)
 	r.Post("/users/generate_token", userHandler.GetJwt)
-	r.Delete("/products/{id}", productHandler.DeleteProduct)
 
 	http.ListenAndServe(":8000", r)
 }

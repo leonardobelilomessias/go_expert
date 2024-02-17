@@ -19,8 +19,8 @@ type userHandler struct {
 
 func NewUserHandler(userDB database.UserInterface, jwt *jwtauth.JWTAuth, JwtExpiresIn int) *userHandler {
 	return &userHandler{
-		UserDB: userDB,
-		Jwt: jwt,
+		UserDB:        userDB,
+		Jwt:           jwt,
 		JwtExperiesIn: JwtExpiresIn,
 	}
 }
@@ -45,7 +45,7 @@ func (h *userHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 		"sub": u.ID.String(),
 		"exp": time.Now().Add(time.Second * time.Duration(h.JwtExperiesIn)).Unix(),
 	})
-	println("token string",tokenString)
+	println("token string", tokenString)
 	accessToken := struct {
 		AccessToken string `json:"access_token"`
 	}{
