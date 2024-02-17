@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -28,10 +29,14 @@ func main() {
 	productHandler := handlers.NewProductHandle(preducutDB)
 
 	userDB := database.NewUser(db)
-	userHandler := handlers.NewUserHandler(userDB, configs.TokenAuth, configs.JwtExperesIn)
+	userHandler := handlers.NewUserHandler(userDB)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.WithValue("jwt", configs.TokenAuth))
+	r.Use(middleware.WithValue("JwtExperesIn", configs.JwtExperesIn))
+
 	r.Route("/products", func(r chi.Router) {
 		r.Use(jwtauth.Verifier(configs.TokenAuth))
 		r.Use(jwtauth.Authenticator)
@@ -45,4 +50,12 @@ func main() {
 	r.Post("/users/generate_token", userHandler.GetJwt)
 
 	http.ListenAndServe(":8000", r)
+}
+
+func LogReqest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r.Context().Value("user")
+		log.Printf(r.Method, r.URL.Path)
+		next.ServeHTTP(w, r)
+	})
 }
