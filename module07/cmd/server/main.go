@@ -7,13 +7,33 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/jwtauth"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"goexpert.com/module07/configs"
+	_ "goexpert.com/module07/docs"
 	"goexpert.com/module07/internal/entity"
 	"goexpert.com/module07/internal/infra/database"
 	"goexpert.com/module07/internal/infra/webserver/handlers"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+// @title Go Expert API
+// @version 1.0
+// @description This is a sample server Petstore server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8000
+// @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	configs, err := configs.LoadConfig(".")
@@ -48,6 +68,7 @@ func main() {
 	})
 	r.Post("/users", userHandler.Create)
 	r.Post("/users/generate_token", userHandler.GetJwt)
+	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("http://localhost:8000/docs/doc.json")))
 
 	http.ListenAndServe(":8000", r)
 }

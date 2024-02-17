@@ -54,6 +54,11 @@ func (h *userHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Create user godoc
+//@Summary create user
+//@Description create user
+//@Tags users
+@Acept
 func (h *userHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var user dto.CreateUserInput
 	err := json.NewDecoder(r.Body).Decode(&user)
