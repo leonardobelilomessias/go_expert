@@ -25,6 +25,17 @@ func NewUserHandler(userDB database.UserInterface) *userHandler {
 	}
 }
 
+// GEtJWT godoc
+// @Summary Get a user JWT
+// @Description Get a user JWT
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param request body 	dto.GetJWTIput true "user credentials"
+// @Success 200 {object} dto.GetJWTOutput
+// @Failure 404 {object} Error
+// @Failure 500 {object} Error
+// @Router /users/generate_token [post]
 func (h *userHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 	jwt := r.Context().Value("jwt").(*jwtauth.JWTAuth)
 	jwtExperesIn := r.Context().Value("JwtExperesIn").(int)
@@ -36,7 +47,9 @@ func (h *userHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 	}
 	u, err := h.UserDB.FindByEmail(user.Email)
 	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
+		w.WriteHeader(http.StatusNotFound)
+		error := Error{Message: err.Error()}
+		json.NewEncoder(w).Encode(error)
 		return
 	}
 	if !u.ValidatePassword(user.Password) {
@@ -47,9 +60,7 @@ func (h *userHandler) GetJwt(w http.ResponseWriter, r *http.Request) {
 		"sub": u.ID.String(),
 		"exp": time.Now().Add(time.Second * time.Duration(jwtExperesIn)).Unix(),
 	})
-	accessToken := struct {
-		AccessToken string `json:"access_token"`
-	}{
+	accessToken := dto.GetJWTOutput{
 		AccessToken: tokenString,
 	}
 	w.Header().Set("Content-Type", "application/json")
