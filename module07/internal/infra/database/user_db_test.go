@@ -43,7 +43,7 @@ func TestFindByEmail(t *testing.T) {
 	err = userDB.Create(user)
 	assert.Nil(t, err)
 
-	userFound, err := userDB.findByEmail(user.Email)
+	userFound, err := userDB.FindByEmail(user.Email)
 	assert.Nil(t, err)
 	assert.Equal(t, user.ID, userFound.ID)
 	assert.Equal(t, user.Name, userFound.Name)
