@@ -25,3 +25,17 @@ func (ed *EventDispacher) Register(eventName string, handler EventHandlerInterfa
 	ed.handlers[eventName] = append(ed.handlers[eventName], handler)
 	return nil
 }
+func (ed *EventDispacher) Has(eventName string, handler EventHandlerInterface) bool {
+	if _, ok := ed.handlers[eventName]; ok {
+		for _, h := range ed.handlers[eventName] {
+			if h == handler {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (ed *EventDispacher) Clear() {
+	ed.handlers = make(map[string][]EventHandlerInterface)
+}

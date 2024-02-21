@@ -62,10 +62,49 @@ func (suite *EventDispacherTestSuite) TestEventDispacher_Register() {
 	err = suite.eventDispacher.Register(suite.event.GetName(), &suite.handler2)
 	suite.Nil(err)
 	suite.Equal(2, len(suite.eventDispacher.handlers[suite.event.GetName()]))
-	assert.Equal(suite.T(),&suite.handler, suite.eventDispacher.handlers[suite.event.GetName()][0])
-	assert.Equal(suite.T(),&suite.handler2, suite.eventDispacher.handlers[suite.event.GetName()][1])
+	assert.Equal(suite.T(), &suite.handler, suite.eventDispacher.handlers[suite.event.GetName()][0])
+	assert.Equal(suite.T(), &suite.handler2, suite.eventDispacher.handlers[suite.event.GetName()][1])
+}
+func (suite *EventDispacherTestSuite) TestEventDispacher_Register_WithSameHandler() {
+	err := suite.eventDispacher.Register(suite.event.GetName(), &suite.handler)
+	suite.Nil(err)
+	suite.Equal(1, len(suite.eventDispacher.handlers[suite.event.GetName()]))
 
-	}	
+	err = suite.eventDispacher.Register(suite.event.GetName(), &suite.handler)
+	suite.Equal(ErrHandlerAlreadyRegistered, err)
+	suite.Equal(1, len(suite.eventDispacher.handlers[suite.event.GetName()]))
+
+	suite.eventDispacher.Clear()
+	suite.Equal(0, len(suite.eventDispacher.handlers))
+}
+func (suite *EventDispacherTestSuite) TestEventDispacher_Clear() {
+	err := suite.eventDispacher.Register(suite.event.GetName(), &suite.handler)
+	suite.Nil(err)
+	suite.Equal(1, len(suite.eventDispacher.handlers[suite.event.GetName()]))
+
+	err = suite.eventDispacher.Register(suite.event.GetName(), &suite.handler2)
+	suite.Nil(err)
+	suite.Equal(2, len(suite.eventDispacher.handlers[suite.event.GetName()]))
+
+	err = suite.eventDispacher.Register(suite.event2.GetName(), &suite.handler3)
+	suite.Nil(err)
+	suite.Equal(1, len(suite.eventDispacher.handlers[suite.event2.GetName()]))
+}
+
+func (suite *EventDispacherTestSuite) TestEventDispacher_Has() {
+	err := suite.eventDispacher.Register(suite.event.GetName(), &suite.handler)
+	suite.Nil(err)
+	suite.Equal(1, len(suite.eventDispacher.handlers[suite.event.GetName()]))
+
+	err = suite.eventDispacher.Register(suite.event.GetName(), &suite.handler2)
+	suite.Nil(err)
+	suite.Equal(2, len(suite.eventDispacher.handlers[suite.event.GetName()]))
+
+	assert.True(suite.T(), suite.eventDispacher.Has(suite.event.GetName(), &suite.handler))
+	assert.True(suite.T(), suite.eventDispacher.Has(suite.event.GetName(), &suite.handler2))
+	assert.False(suite.T(), suite.eventDispacher.Has(suite.event.GetName(), &suite.handler3))
+
+}
 func TestSuite(t *testing.T) {
 	suite.Run(t, new(EventDispacherTestSuite))
 }
