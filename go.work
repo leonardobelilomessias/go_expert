@@ -2,4 +2,5 @@ go 1.19
 
 use (
 ./module07
+./module09/lesson01-events
 )
