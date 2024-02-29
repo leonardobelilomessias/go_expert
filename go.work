@@ -1,8 +1,10 @@
 go 1.19
 
 use (
-./module07
-./module09/lesson01-events
-./module11-graphql
-./module12-grpc
+	./module07
+	./module09/lesson01-events
+	./module11-graphql
+	./module12-grpc
+	./module14-cobra-cli
+
 )

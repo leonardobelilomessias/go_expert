@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	_"github.com/mattn/go-sqlite3"
 	"goexpert.com/module12-grpc/internal/database"
 	"goexpert.com/module12-grpc/internal/pb"
 	"goexpert.com/module12-grpc/internal/service"
