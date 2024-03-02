@@ -6,5 +6,5 @@ use (
 	./module11-graphql
 	./module12-grpc
 	./module14-cobra-cli
-
+	./module15-sqlc
 )
